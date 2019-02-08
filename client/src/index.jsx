@@ -4,7 +4,6 @@ import $ from 'jquery';
 
 
 class App extends React.Component {
-
   render () {
     return (
       <div>
@@ -13,4 +12,5 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+
+ReactDOM.render(<App />, document.getElementById('summary'));
