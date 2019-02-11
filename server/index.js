@@ -11,9 +11,9 @@ app.get('/shop/:productId', (req, res) => {
   let item = req.params.productId;
   retrieveOne(item, (err, data) => {
     if (err) {
-      res.status(404).send('error');
+      res.status(404).end();
     }
-    res.status(200).send(data);
+    res.status(200).send(data).end();
   });
 });
 

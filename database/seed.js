@@ -36,7 +36,7 @@ let createSummary = function() {
       image: faker.image.fashion(),
       price: faker.commerce.price()
     });
-    newItem.save((err) => {
+    newItem.save(err => {
       if (err) {
         console.log(err);
       } else {
@@ -50,7 +50,6 @@ let retrieveOne = (itemId, callback) => {
   itemList.find({ productId: itemId }, (err, data) => {
     if (err) {
       throw err;
-      return;
     }
     callback(null, data);
   });    
