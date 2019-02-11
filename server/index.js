@@ -1,14 +1,20 @@
 const express = require('express');
-var bodyParser = require('body-parser');
+
 let app = express();
+var bodyParser = require('body-parser');
+let retrieveOne = require('../database/seed.js').retrieveOne;
+
+app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client/dist'));
 
-app.post('/', function (req, res) {
-  res.status(201).send();
-});
-
-app.get('/', function (req, res) {
-  res.status(200).send('testing');
+app.get('/shop/:productId', (req, res) => {
+  let item = req.params.productId;
+  retrieveOne(item, (err, data) => {
+    if (err) {
+      res.status(404).send('error');
+    }
+    res.status(200).send(data);
+  });
 });
 
 let port = 3000;
