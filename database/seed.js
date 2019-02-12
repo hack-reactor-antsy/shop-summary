@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/shop');
+mongoose.connect('mongodb://localhost/shop', { useNewUrlParser: true, useCreateIndex: true });
 
 var db = mongoose.connection;
 const faker = require('faker');
@@ -9,7 +9,7 @@ db.once('open', function() {
   console.log('Connected!');
 });
 
-var itemSchema = mongoose.Schema({
+const itemSchema = mongoose.Schema({
   productId: {
     type: Number,
     unique: true },
@@ -22,28 +22,43 @@ var itemSchema = mongoose.Schema({
 
 var itemList = mongoose.model('itemList', itemSchema);
 
-var createSummary = function() {
-  for (var itemId = 1; itemId <= 100; itemId++) {
-    var newItem = new itemList({
+itemList.deleteMany({}, () => {
+  console.log('Database dropped.');
+});
+
+let createSummary = function() {
+  for (let itemId = 1; itemId <= 100; itemId ++) {
+    let newItem = new itemList({
       productId: itemId, 
       shop: 'My Shop',
       location: faker.address.city() + ', ' + faker.address.zipCode(),
       description: faker.lorem.sentence(), 
-      price: faker.commerce.price(),
-      image: faker.image.fashion()
+      image: faker.image.fashion(),
+      price: faker.commerce.price()
     });
-    newItem.save((err, itemId) => {
+    newItem.save(err => {
       if (err) {
         console.log(err);
       } else {
         console.log('Items seeded');
       }
     });
-  } 
+  }
 };
 
-var seed = () => {
+let retrieveOne = (itemId, callback) => {
+  itemList.find({ productId: itemId }, (err, data) => {
+    if (err) {
+      throw err;
+    }
+    callback(null, data);
+  });    
+};
+
+let seed = () => {
   createSummary();
 };
 
 seed();
+
+module.exports.retrieveOne = retrieveOne;
