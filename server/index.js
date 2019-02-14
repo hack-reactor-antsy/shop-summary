@@ -3,6 +3,7 @@ const express = require('express');
 let app = express();
 var bodyParser = require('body-parser');
 let retrieveOne = require('../database/seed.js').retrieveOne;
+let retrieve = require('../database/seed.js').retrieve;
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client/dist'));
@@ -10,6 +11,15 @@ app.use(express.static(__dirname + '/../client/dist'));
 app.get('/shop/:productId', (req, res) => {
   let item = req.params.productId;
   retrieveOne(item, (err, data) => {
+    if (err) {
+      res.status(404).end();
+    }
+    res.status(200).send(data).end();
+  });
+});
+
+app.get('/shop/', (req, res) => {
+  retrieve((err, data) => {
     if (err) {
       res.status(404).end();
     }
