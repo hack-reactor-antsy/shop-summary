@@ -27,13 +27,13 @@ itemList.deleteMany({}, () => {
 });
 
 let createSummary = function() {
-  for (let itemId = 1; itemId <= 100; itemId ++) {
+  for (let itemId = 0; itemId <= 100; itemId ++) {
     let newItem = new itemList({
       productId: itemId, 
       shop: 'My Shop',
-      location: faker.address.city() + ', ' + faker.address.zipCode(),
+      location: faker.address.city() + ', ' + faker.address.state(),
       description: faker.lorem.sentence(), 
-      image: faker.image.fashion(),
+      image: faker.image.technics(),
       price: faker.commerce.price()
     });
     newItem.save(err => {
@@ -44,6 +44,15 @@ let createSummary = function() {
       }
     });
   }
+};
+
+let retrieve = (callback) => {
+  itemList.find({}, (err, data) => {
+    if (err) {
+      throw err;
+    }
+    callback(null, data);
+  });
 };
 
 let retrieveOne = (itemId, callback) => {
@@ -62,3 +71,4 @@ let seed = () => {
 seed();
 
 module.exports.retrieveOne = retrieveOne;
+module.exports.retrieve = retrieve;
